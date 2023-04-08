@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>yangbear 听写</title>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/layout.css" />
+		<link rel="stylesheet" type="text/css" href="css/home-style.css" />
+		<link rel="stylesheet" type="text/css" href="css/media.css" />
+		<link rel="stylesheet" type="text/css" href="css/animates.css" />
+		<link rel="stylesheet" type="text/css" href="css/fonts.css" />
+		<!-- 引入js -->
+		<script src="js/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 引入图标 -->
+		<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+		<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+	</head>
+	<body>
+		<header>
+			<div class="container">
+				<nav>
+					<a href="" class="logo"><span class="them-color">Bear</span> 听写</a>
+					<div class="hub">
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+				</nav>
+			</div>
+		</header>
+		<main>
+			<!-- 输入单词 -->
+			<section class="section word-box">
+				<div class="container">
+					<h2 class="title">添加单词</h2>
+					<input class="words" id="words" placeholder="请输入单词   (以空格分割单词)"></input>
+					<div class="tip"><b>提示：</b>
+						<div class="row">
+							<div class="col-md-6 col-sm-6 col-xl-6">
+								<ol>
+									<li>
+										<span class="them-red">请切换英文输入法</span>
+									</li>
+									<li>
+										<span class="them-red">括号请输入英文括号</span>
+									</li>
+									<li>
+										<span class="them-red">单词用空格分割 短语用括号分割</span>
+									</li>
+									<li>
+										<span class="">实例 direction caption (be able to do)</span>
+									</li>
+									<li>
+										<a href="https://www.cqksy.cn/site/infopub/2022/gzfl/2022zzwhszksyychb.html" target="_blank">点击我查看考纲</a>
+									</li>
+								</ol>
+							</div>
+							<div class="col-md-6 col-sm-6 col-xl-6">
+								<div class="smile">
+									<img src="img/smile-listen.png">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="btn-box">
+						<button class="add_dictation">添加单词 (Enter)</button>
+					</div>
+				</div>
+			</section>
+			<!-- 输入单词 end -->
+			<!-- 管理单词 -->
+			<section class="section word-box">
+				<div class="container">
+					<h2 class="title">管理单词</h2>
+					<!-- 	<div class="word" wordIndex='0'>direction <ion-icon name="close"></ion-icon></div>
+							<div class="word">box <ion-icon name="close"></ion-icon></div>
+							<div class="word">sand <ion-icon name="close"></ion-icon></div>
+							<div class="word">num <ion-icon name="close"></ion-icon></div> -->
+					<!-- <div class="tip">空空如也</div> -->
+					<h4 class=" subtitle">
+						单词
+					</h4>
+					<div class="word-content categroy-word">
+					</div>
+					<h4 class=" subtitle">短语</h4>
+					<div class="word-content categroy-phrase">
+					</div>
+				</div>
+			</section>
+
+			<!-- 管理单词 end -->
+			<!-- 开始听写 -->
+
+			<!-- 开始听写 end -->
+		</main>
+		<script type="text/javascript">
+			// 添加单词
+			var wordArray = []
+			$(".add_dictation").click(function() {
+				addWord()
+
+				//   删除不能存在的字符
+				// wordText = wordText.replace(/((?!\w).)/g,'&')
+
+				//    单词提取出来
+				$("#words").val('')
+			})
+			// 注册键盘事件
+			$(".words").focus(function() {
+				$(this).keypress(function(e) {
+					if (e.keyCode == 13) {
+						addWord()
+						$("#words").val('')
+					}
+				})
+			})
+			$(".words").blur(function() {
+				$(this).unbind('keypress')
+			})
+
+			function addWord() {
+				let wordText = $("#words").val()
+				if (wordText == '') {
+
+				} else {
+					//    把短语提取出来
+					// wordArray.concat()
+					// console.log();
+					if (wordText.match(/(?<=\()(.+?)(?=\))/g) !== null) {
+						wordText.match(/(?<=\()(.+?)(?=\))/g).forEach(function(v, i) {
+							wordArray.push(v)
+							let muban =
+								`<div class="word" wordIndex="${wordArray.length-1}">${v}<ion-icon name="close"></ion-icon></div>`
+							$(".categroy-phrase").append(muban)
+						})
+					}
+					wordText = wordText.replace(/\((.+?)\)/g, '')
+					wordText.split(' ').filter((s) => {
+						return s !== ''
+					}).forEach(function(v, i) {
+						wordArray.push(v)
+						let muban =
+							`<div class="word" wordIndex="${wordArray.length-1}">${v}<ion-icon name="close"></ion-icon></div>`
+						$(".categroy-word").append(muban)
+					})
+					// console.log(wordText.split(' ').filter((s)=>{
+					// 	return s !==''
+					// }))
+					console.log(wordArray);
+					// let muban = `<div class="word" wordIndex="${wordArray.length-1}">${text}<ion-icon name="close"></ion-icon></div>`
+					// $(".word-content").append(muban)
+					// if (wordArray.length !== 0) {
+					// 	$(".word-content .tip").hide()
+					// } else {
+					// 	$(".word-content .tip").show()
+					// }
+				}
+			}
+
+			function getToken() {
+				var form = new FormData();
+				var settings = {
+					"url": "https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=EEjWhHZOCFZ92H0oZZ10AjBq&client_secret=3wDW2Y0S4ve9wiahit7KfkkfI1KX4uSf",
+					"method": "POST",
+					"timeout": 0,
+					"processData": false,
+					"mimeType": "multipart/form-data",
+					"contentType": false,
+					"data": form
+				};
+				let token
+				$.ajax(settings).done(function(response) {
+					// console.log(JSON.parse(response));
+					// 设置token
+					token = JSON.parse(response).access_token
+					localStorage.setItem('token', token)
+				});
+				return localStorage.getItem('token')
+			}
+
+			function getTranslate(text) {
+				var settings = {
+					"url": "https://aip.baidubce.com/rpc/2.0/mt/texttrans/v1?access_token=" + getToken(),
+					"method": "POST",
+					"timeout": 0,
+					"headers": {
+						"Content-Type": "application/json;charset=utf-8"
+					},
+					"data": `{"q":"${text}","from":"auto","to":"en"}`,
+				};
+
+				$.ajax(settings).done(function(response) {
+					// console.log(response);
+				});
+			}
+			// getTranslate('欢迎听写')
+		</script>
+	</body>
+</html>
