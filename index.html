@@ -104,7 +104,7 @@
 				<div class="container card">
 					<div class="dictation-word">
 						<div class="text">Box</div>
-						<ion-icon name="eye-outline"></ion-icon>
+						<ion-icon class='eye' name="eye-outline"></ion-icon>
 					</div>
 					<div class="dictation-translate">盒子</div>
 				</div>
@@ -200,7 +200,17 @@
 					getTip('已经把您的特殊字符删除，添加成功😉', 'success')
 				}
 			}
-
+			let eyeFlag = true
+			$(".eye").click(function () {
+				$(this).parents('.dictation-word').find('.text').toggleClass('text-show')
+				if (eyeFlag) {
+					$(this).attr('name','eye-off-outline')
+					eyeFlag=false
+				}else {
+					$(this).attr('name','eye-outline')
+					eyeFlag=true
+				}
+			})
 			function getTip(text, code) {
 				$(".tool .dialog-text").removeClass('dialog-erro dialog-success')
 				if (code == 'erro') {
@@ -305,7 +315,7 @@
 				};
 
 				$.ajax(settings).done(function(response) {
-					// console.log(response.result.trans_result[0]);
+					console.log(response);
 					// wordTranslateArray[wordTranslateArray.length]=response.result.trans_result[0].dst
 					$(wordArray).map((i, v) => {
 						// console.log(v);

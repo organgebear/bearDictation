@@ -163,6 +163,9 @@ main {
 .dictation-box .text {
 	filter: blur(10px);
 }
+.dictation-box .text-show {
+	filter: blur(0px);
+}
 .dictation-next {
 	margin-top: 30px;
 }
