@@ -53,7 +53,8 @@
 										<span class="">实例 direction caption (be able to do)</span>
 									</li>
 									<li>
-										<a href="https://www.cqksy.cn/site/infopub/2022/gzfl/2022zzwhszksyychb.html" target="_blank">点击我查看考纲</a>
+										<a href="https://www.cqksy.cn/site/infopub/2022/gzfl/2022zzwhszksyychb.html"
+											target="_blank">点击我查看考纲</a>
 									</li>
 								</ol>
 							</div>
@@ -92,12 +93,38 @@
 
 			<!-- 管理单词 end -->
 			<!-- 开始听写 -->
-
+			<section class="section">
+				<div class="container">
+					<div class="start">开始听写</div>
+				</div>
+			</section>
 			<!-- 开始听写 end -->
+			<!-- 听写内容板块 -->
+			<div class="dictation-box" wordIndex='0'>
+				<div class="container card">
+					<div class="dictation-word">
+						<div class="text">Box</div>
+						<ion-icon name="eye-outline"></ion-icon>
+					</div>
+					<div class="dictation-translate">盒子</div>
+				</div>
+				<div class="container">
+					<div class="dictation-next btn-normal">下一个(Enter)</div>
+				</div>
+			</div>
+			<!-- 听写内容板块 end -->
 		</main>
+		<div class="tool">
+			<div class="dialog">
+				<div class="container dialog-text dialog-success">我是一些提示</div>
+			</div>
+		</div>
 		<script type="text/javascript">
 			// 添加单词
+			// var wordArray = ['direction' ,'caption' ,'be able to do']
 			var wordArray = []
+			var phraseArray = []
+			var wordTranslateArray = []
 			$(".add_dictation").click(function() {
 				addWord()
 
@@ -112,7 +139,6 @@
 				$(this).keypress(function(e) {
 					if (e.keyCode == 13) {
 						addWord()
-						$("#words").val('')
 					}
 				})
 			})
@@ -122,15 +148,26 @@
 
 			function addWord() {
 				let wordText = $("#words").val()
-				if (wordText == '') {
+				// console.log(wordText.match(/[`'`\\/]/g));
 
+
+				if (wordText == '' || wordText.match(/[\u4e00-\u9fa5]/g)) {
+					getTip('添加失败😥 不能为中文或者空', 'erro')
 				} else {
+					wordText = wordText.replace(/[`'`\\/]/g, ' ')
 					//    把短语提取出来
 					// wordArray.concat()
 					// console.log();
 					if (wordText.match(/(?<=\()(.+?)(?=\))/g) !== null) {
 						wordText.match(/(?<=\()(.+?)(?=\))/g).forEach(function(v, i) {
-							wordArray.push(v)
+							wordArray.push({
+								id: wordArray.length,
+								en: v
+							})
+							phraseArray.push({
+								id: wordArray.length,
+								en: v
+							})
 							let muban =
 								`<div class="word" wordIndex="${wordArray.length-1}">${v}<ion-icon name="close"></ion-icon></div>`
 							$(".categroy-phrase").append(muban)
@@ -140,7 +177,10 @@
 					wordText.split(' ').filter((s) => {
 						return s !== ''
 					}).forEach(function(v, i) {
-						wordArray.push(v)
+						wordArray.push({
+							id: wordArray.length,
+							en: v
+						})
 						let muban =
 							`<div class="word" wordIndex="${wordArray.length-1}">${v}<ion-icon name="close"></ion-icon></div>`
 						$(".categroy-word").append(muban)
@@ -156,7 +196,80 @@
 					// } else {
 					// 	$(".word-content .tip").show()
 					// }
+					$("#words").val('')
+					getTip('已经把您的特殊字符删除，添加成功😉', 'success')
 				}
+			}
+
+			function getTip(text, code) {
+				$(".tool .dialog-text").removeClass('dialog-erro dialog-success')
+				if (code == 'erro') {
+					$(".tool .dialog-text").addClass('dialog-erro')
+
+				} else {
+					$(".tool .dialog-text").addClass('dialog-success')
+				}
+				$(".tool").addClass('tool-show')
+				$(".dialog-text").text(text)
+				setTimeout(function() {
+					$(".tool").removeClass('tool-show')
+				}, 1500)
+
+			}
+			$(".word-content").on('click', 'ion-icon', function() {
+				// console.log($(this).parents('.word').attr('wordindex'));
+				$(this).parents('.word').remove()
+				wordArray.splice($(this).parents('.word').attr('wordindex'), 1)
+			})
+			$(".start").click(function() {
+				$(".dictation-box").show()
+				// 获取翻译数组
+				$(wordArray).each(function(i, v) {
+					getTranslate(v.en, v.id)
+				})
+
+			})
+			// 切换单词
+			$(".dictation-next").click(function() {
+				let maxLength = wordArray.length
+				let randNum = rand(wordArray)
+				console.log(randNum);
+				let wordIndex = $('.dictation-box').attr('wordIndex') * 1 + 1
+				// outPutCard (wordIndex) 
+				console.log(wordIndex);
+				$(".dictation-word").text()
+				$(".dictation-translate").text()
+			})
+			let randArray = []
+
+			function rand(arr) {
+				if (randArray.length !== wordArray.length) {
+					let randNum 
+					let randFlag=true
+					do{
+						randNum = Math.ceil(Math.random() * wordArray.length)
+						$(randArray).each(function(i, v) {
+							if (v == randNum) {
+								
+							} else {
+								randNum[length] = [randNum]
+								return
+							}
+						})
+						console.log(randNum);
+					}while(randFlag)
+					return randNum
+				}
+			}
+		 
+
+			function outPutCard(index) {
+				let english = wordArray[index]
+				let chinese = wordTranslateArray[index]
+				$('.dictation-box').attr('wordIndex', index)
+				console.log(english, chinese);
+				$(".dictation-translate").text(chinese)
+				$(".dictation-word .text").text(english)
 			}
 
 			function getToken() {
@@ -180,7 +293,7 @@
 				return localStorage.getItem('token')
 			}
 
-			function getTranslate(text) {
+			function getTranslate(text, id) {
 				var settings = {
 					"url": "https://aip.baidubce.com/rpc/2.0/mt/texttrans/v1?access_token=" + getToken(),
 					"method": "POST",
@@ -188,14 +301,21 @@
 					"headers": {
 						"Content-Type": "application/json;charset=utf-8"
 					},
-					"data": `{"q":"${text}","from":"auto","to":"en"}`,
+					"data": `{"q":"${text}","from":"auto","to":"zh"}`,
 				};
 
 				$.ajax(settings).done(function(response) {
-					// console.log(response);
+					// console.log(response.result.trans_result[0]);
+					// wordTranslateArray[wordTranslateArray.length]=response.result.trans_result[0].dst
+					$(wordArray).map((i, v) => {
+						// console.log(v);
+						if (v.id == id) {
+							v.ch = response.result.trans_result[0].dst
+						}
+					})
+					console.log(wordArray);
 				});
 			}
-			// getTranslate('欢迎听写')
 		</script>
 	</body>
 </html>

@@ -102,13 +102,13 @@ main {
 	justify-content: space-between;
 }
 
-ion-icon {
+.word-box ion-icon {
 	cursor: pointer;
 	margin-top: 2px;
 	padding: 3px;
 }
 
-ion-icon:hover {
+.word-box ion-icon:hover {
 	background-color: rgba(255, 62, 65, 0.5);
 	-webkit-border-radius: 50%;
 	-moz-border-radius: 50%;
@@ -116,4 +116,102 @@ ion-icon:hover {
 	color: #fff;
 }
 
+.start {
+	text-align: center;
+	background-color: #7e67ff;
+	color: #fff;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	padding: 10px;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.dictation-box {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: #444;
+	z-index: 10;
+	left: 0;
+	top: 0;
+	text-align: center;
+	display: none;
+}
+
+.dictation-word {
+	font-size: 60px;
+	font-weight: 800;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.dictation-box ion-icon {
+	cursor: pointer;
+	margin-top: 10px;
+	margin-left: 20px;
+}
+.dictation-translate {
+	font-size: 30px;
+	font-weight: 800;
+}
+.dictation-box .text {
+	filter: blur(10px);
+}
+.dictation-next {
+	margin-top: 30px;
+}
+.dictation-box .card {
+	background-color: #fff;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	padding: 10px;
+	height: 400px;
+	margin-top: 100px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-flow: column;
+}
+
 /* main end */
+/* tool */
+.tool {
+	position: fixed;
+	left: 0;
+	top: -100%;
+	width: 100%;
+	transition: all .5s ease;
+}
+
+.tool-show {
+	top: 0;
+}
+
+.dialog-text {
+	background-color: #cccccc;
+	padding: 10px;
+	text-align: center;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	font-size: 100%;
+}
+
+.dialog-erro {
+	background-color: #cc3335;
+	color: #fff;
+}
+
+.dialog-success {
+	background-color: #20cc71;
+	color: #fff;
+}
+
+/* tool end */
