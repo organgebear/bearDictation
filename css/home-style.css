@@ -76,6 +76,7 @@ main {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	flex-flow: wrap;
 }
 
 .word-content {
@@ -156,19 +157,24 @@ main {
 	margin-top: 10px;
 	margin-left: 20px;
 }
+
 .dictation-translate {
 	font-size: 30px;
 	font-weight: 800;
 }
+
 .dictation-box .text {
 	filter: blur(10px);
 }
+
 .dictation-box .text-show {
 	filter: blur(0px);
 }
+
 .dictation-next {
 	margin-top: 30px;
 }
+
 .dictation-box .card {
 	background-color: #fff;
 	-webkit-border-radius: 4px;
@@ -218,3 +224,26 @@ main {
 }
 
 /* tool end */
+/* 轮播 */
+.slider-wrap {
+	position: relative;
+	overflow: hidden;
+	height: 500px;
+}
+
+.slider-list {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	position: relative;
+	left: 0;
+	transition: all .5s ease;
+}
+
+.slider-item {
+	width: 100%;
+	height: 100%;
+	flex: none;
+}
+
+/* 轮播 end */

@@ -13,6 +13,7 @@
 		<link rel="stylesheet" type="text/css" href="css/fonts.css" />
 		<!-- 引入js -->
 		<script src="js/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/slider.js" type="text/javascript" charset="utf-8"></script>
 		<!-- 引入图标 -->
 		<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 		<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -22,11 +23,11 @@
 			<div class="container">
 				<nav>
 					<a href="" class="logo"><span class="them-color">Bear</span> 听写</a>
-					<div class="hub">
+					<!-- <div class="hub">
 						<div></div>
 						<div></div>
 						<div></div>
-					</div>
+					</div> -->
 				</nav>
 			</div>
 		</header>
@@ -101,15 +102,15 @@
 			<!-- 开始听写 end -->
 			<!-- 听写内容板块 -->
 			<div class="dictation-box" wordIndex='0'>
-				<div class="container card">
-					<div class="dictation-word">
-						<div class="text">Box</div>
-						<ion-icon class='eye' name="eye-outline"></ion-icon>
-					</div>
-					<div class="dictation-translate">盒子</div>
+				
+				<div class="slider-wrap">
+					<ul class="slider-list">
+					</ul>
 				</div>
-				<div class="container">
-					<div class="dictation-next btn-normal">下一个(Enter)</div>
+				<div class="container btn-box">
+					<div class="dictation-next btn-normal move-right">上一个(Shift)</div>
+					<div class="dictation-next btn-normal move-left">下一个(Enter)</div>
+				<div class="dictation-next btn-normal btn-close">返回编辑</div>
 				</div>
 			</div>
 			<!-- 听写内容板块 end -->
@@ -122,6 +123,26 @@
 		<script type="text/javascript">
 			// 添加单词
 			// var wordArray = ['direction' ,'caption' ,'be able to do']
+			// var wordArray = [
+			// 	{
+			// 		id:1,
+			// 		en:'direction',
+			// 		ch:'',
+			// 		type:"word"
+			// 	},{
+			// 		id:2,
+			// 		en:'caption',
+			// 		ch:'',
+			// 		type:"word"
+			// 	},
+			// 	{
+			// 		id:3,
+			// 		en:'be able to do',
+			// 		ch:'',
+			// 		type:"phrase"
+			// 	}
+				
+			// ]
 			var wordArray = []
 			var phraseArray = []
 			var wordTranslateArray = []
@@ -201,7 +222,7 @@
 				}
 			}
 			let eyeFlag = true
-			$(".eye").click(function () {
+			$("body").on('click','.eye',function () {
 				$(this).parents('.dictation-word').find('.text').toggleClass('text-show')
 				if (eyeFlag) {
 					$(this).attr('name','eye-off-outline')
@@ -210,6 +231,7 @@
 					$(this).attr('name','eye-outline')
 					eyeFlag=true
 				}
+				console.log(2);
 			})
 			function getTip(text, code) {
 				$(".tool .dialog-text").removeClass('dialog-erro dialog-success')
@@ -224,7 +246,6 @@
 				setTimeout(function() {
 					$(".tool").removeClass('tool-show')
 				}, 1500)
-
 			}
 			$(".word-content").on('click', 'ion-icon', function() {
 				// console.log($(this).parents('.word').attr('wordindex'));
@@ -233,20 +254,37 @@
 			})
 			$(".start").click(function() {
 				$(".dictation-box").show()
-				// 获取翻译数组
-				$(wordArray).each(function(i, v) {
-					getTranslate(v.en, v.id)
+				// 翻译数组
+				let translateArray = wordArray
+				translateArray.forEach(function (v,i) {
+					getTranslate(v.en, v.id) 
 				})
+				randArray=wordArray.sort(function () {
+				return 0.5 - Math.random()
+				})
+				$("body,html").css('overflow','hidden')
+				// outPutCard()
 
+			})
+			$(".btn-close").click(function() {
+				$("body,html").css('overflow','auto')
+				$(".dictation-box").hide()
+				randArray=wordArray.sort(function () {
+				return 0.5 - Math.random()
+				})
+				$(".slider-list").empty()
+				outPutCard()
+			
 			})
 			// 切换单词
 			$(".dictation-next").click(function() {
 				let maxLength = wordArray.length
-				let randNum = rand(wordArray)
-				console.log(randNum);
-				let wordIndex = $('.dictation-box').attr('wordIndex') * 1 + 1
+				// let randNum = rand(wordArray)
+				// console.log(randNum);
+				// console.log(wordArray);
+				// let wordIndex = $('.dictation-box').attr('wordIndex') * 1 + 1
 				// outPutCard (wordIndex) 
-				console.log(wordIndex);
+				// console.log(wordIndex);
 				$(".dictation-word").text()
 				$(".dictation-translate").text()
 			})
@@ -255,31 +293,45 @@
 			function rand(arr) {
 				if (randArray.length !== wordArray.length) {
 					let randNum 
-					let randFlag=true
-					do{
-						randNum = Math.ceil(Math.random() * wordArray.length)
+					let randFlag = true
+					while(randFlag){
+						randNum = Math.ceil(Math.random() * wordArray.length-1)
 						$(randArray).each(function(i, v) {
 							if (v == randNum) {
 								
 							} else {
-								randNum[length] = [randNum]
-								return
+								randArray.push(randNum)
+								randFlag=false
 							}
 						})
-						console.log(randNum);
-					}while(randFlag)
+					}
+					console.log(randNum);
 					return randNum
 				}
 			}
 		 
 
-			function outPutCard(index) {
-				let english = wordArray[index]
-				let chinese = wordTranslateArray[index]
-				$('.dictation-box').attr('wordIndex', index)
-				console.log(english, chinese);
-				$(".dictation-translate").text(chinese)
-				$(".dictation-word .text").text(english)
+			function outPutCard() {
+				$(".slider-list").empty()
+						$(randArray).each(function (i,v) {
+							let muban =`<li class="slider-item">
+										<div class="container card">
+											<div class="dictation-word">
+												<div class="text">${v.en}</div>
+												<ion-icon class='eye' name="eye-outline"></ion-icon>
+											</div>
+											<div class="dictation-translate">${v.ch}</div>
+										</div>
+									</li>`
+							// console.log(muban);
+							$(".slider-list").append(muban)
+						})
+				// let english = wordArray[index]
+				// let chinese = wordTranslateArray[index]
+				// $('.dictation-box').attr('wordIndex', index)
+				// console.log(english, chinese);
+				// $(".dictation-translate").text(chinese)
+				// $(".dictation-word .text").text(english)
 			}
 
 			function getToken() {
@@ -323,7 +375,7 @@
 							v.ch = response.result.trans_result[0].dst
 						}
 					})
-					console.log(wordArray);
+					outPutCard()
 				});
 			}
 		</script>

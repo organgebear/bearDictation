@@ -52,6 +52,10 @@ h1,h4 {
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+	margin-right: 15px;
+}
+.btn-close {
+	flex: 1;
 }
 /* .section  .container{
 	box-shadow: 0px 0px 10px rgba(0,0,0,.5);

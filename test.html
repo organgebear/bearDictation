@@ -1,54 +1,25 @@
-<!doctype html>
-<head>
-    <meta charset="utf-8"/>
-</head>
-<body>
-<div>可打开浏览器控制台查看结果</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.bootcdn.net/ajax/libs/crypto-js/4.0.0/crypto-js.js"></script>
-<script type="text/javascript">
-function getTranslate (text) {
-	var appKey = '6d04f2ee5b948867';
-	var key = 'ukXpS8VVJIvv9IgmIlLfKdxK2gPYcUiq';//注意：暴露appSecret，有被盗用造成损失的风险
-	var salt = (new Date).getTime();
-	var curtime = Math.round(new Date().getTime()/1000);
-	var query = text;
-	// 多个query可以用\n连接  如 query='apple\norange\nbanana\npear'
-	var from = 'auto';
-	var to = 'zh-CHS';
-	var str1 = appKey + truncate(query) + salt + curtime + key;
-	var vocabId =  '您的用户词表ID';
-	//console.log('---',str1);
-	
-	var sign = CryptoJS.SHA256(str1).toString(CryptoJS.enc.Hex);
-	$.ajax({
-	    url: 'https://openapi.youdao.com/api',
-	    type: 'post',
-	    dataType: 'jsonp',
-	    data: {
-	        q: query,
-	        appKey: appKey,
-	        salt: salt,
-	        from: from,
-	        to: to,
-	        sign: sign,
-	        signType: "v3",
-	        curtime: curtime,
-	        vocabId: vocabId,
-	    },
-	    success: function (data) {
-	        console.log(data.speakUrl);
-			let audio = `<audio src="${data.speakUrl}" >当前浏览器不支持audio</audio>`
-			$('body').append(audio)
-	    } 
-	});
-	function truncate(q){
-	    var len = q.length;
-	    if(len<=20) return q;
-	    return q.substring(0, 10) + len + q.substring(len-10, len);
-	}
-}
-getTranslate('direction')
-</script>
-</body>
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title></title>
+		<script src="js/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur ratione explicabo magnam optio facere voluptatum natus fugit dignissimos quis quam soluta libero error delectus dolore nulla dolores omnis est nam.
+		<script type="text/javascript">
+			$('body').click(function() {
+				console.log(rand(),'调用');
+			})
+			let wordArray=['1','2','3']
+			let randArray = [0]
+			wordArray.sort(function () {
+				return 0.5 - Math.random()
+			})
+			console.log(wordArray);
+		
+		</script>
+	</body>
+</html>
