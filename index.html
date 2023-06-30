@@ -36,7 +36,7 @@
 			<section class="section word-box">
 				<div class="container">
 					<h2 class="title">添加单词</h2>
-					<input class="words" id="words" placeholder="请输入单词   (以空格分割单词)"></input>
+					<input class="words" id="words"  placeholder="请输入单词   (以空格分割单词)" value="direction caption (be able to do)">
 					<div class="tip"><b>提示：</b>
 						<div class="row">
 							<div class="col-md-6 col-sm-6 col-xl-6">
@@ -257,7 +257,9 @@
 				// 翻译数组
 				let translateArray = wordArray
 				translateArray.forEach(function (v,i) {
-					getTranslate(v.en, v.id) 
+					setTimeout(function () {
+						getTranslate(v.en, v.id) 
+					},30*i)
 				})
 				randArray=wordArray.sort(function () {
 				return 0.5 - Math.random()
@@ -333,7 +335,6 @@
 				// $(".dictation-translate").text(chinese)
 				// $(".dictation-word .text").text(english)
 			}
-
 			function getToken() {
 				var form = new FormData();
 				var settings = {
@@ -353,6 +354,7 @@
 					localStorage.setItem('token', token)
 				});
 				return localStorage.getItem('token')
+				
 			}
 
 			function getTranslate(text, id) {
